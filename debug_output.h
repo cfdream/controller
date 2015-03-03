@@ -11,10 +11,10 @@ const bool OPEN_NOTICE = true;
 const bool OPEN_WARNING = true;
 const bool OPEN_ERROR = true;
 
-const char DEBUG_FNAME[] =  "/users/xuemei/openvswitch-2.3.0/log/debug.txt";
-const char NOTICE_FNAME[] =  "/users/xuemei/openvswitch-2.3.0/log/notice.txt";
-const char WARNING_FNAME[] = "/users/xuemei/openvswitch-2.3.0/log/warning.txt";
-const char ERROR_FNAME[] = "/users/xuemei/openvswitch-2.3.0/log/error.txt";
+const char DEBUG_FNAME[] =  "/users/xuemei/controller/log/debug.txt";
+const char NOTICE_FNAME[] =  "/users/xuemei/controller/log/notice.txt";
+const char WARNING_FNAME[] = "/users/xuemei/controller/log/warning.txt";
+const char ERROR_FNAME[] = "/users/xuemei/controller/log/error.txt";
 
 void DEBUG(const char* buffer);
 void NOTICE(const char* buffer);

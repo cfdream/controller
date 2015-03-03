@@ -8,6 +8,8 @@
 #include <string.h>    //strlen
 #include <stdlib.h>    //strlen
 #include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <arpa/inet.h> //inet_addr
 #include <unistd.h>    //write
 #include <pthread.h> //for threading , link with lpthread
@@ -44,7 +46,7 @@ void *socket_server_func(void*)
     server.sin_port = htons(server_port);
      
     //Bind
-    if(bind(socket_desc,(struct sockaddr*)&server, sizeof(server)) < 0)
+    if(bind(socket_desc, (struct sockaddr*)&server, sizeof(server)) < 0)
     {
         //print the error message
         ERROR("bind failed. Error");
@@ -55,12 +57,7 @@ void *socket_server_func(void*)
     //Listen, accept maximum 5 client connections
     listen(socket_desc , 5);
      
-    //Accept and incoming connection
-    NOTICE("Waiting for incoming connections...");
-    c = sizeof(struct sockaddr_in);
-     
-     
-    //Accept and incoming connection
+    //Accept an incoming connection
     NOTICE("Waiting for incoming connections...");
     c = sizeof(struct sockaddr_in);
 	pthread_t thread_id;
@@ -101,14 +98,24 @@ void *connection_handler(void *thread_data_ptr)
     uint32_t sock = thread_data.client_sock;
     int read_size;
     char client_message[2000];
+    char buffer[1024];
+    int msg_cnt = 0;
      
     //Receive a message from client
     while((read_size = recv(sock, client_message, 2000, 0)) > 0)
     {
+        msg_cnt++;
+
         //end of string marker
 		client_message[read_size] = '\0';
         //sampled_record from switch
         sampled_record_t sampled_record = *((sampled_record_t*)client_message);
+
+        if (msg_cnt % 10 == 0) {
+            snprintf(buffer, 1024, "ip:%u, flow:%u", client_addr, sampled_record.flow_key.srcip);
+            printf("%s\n", buffer);
+            DEBUG(buffer);
+        }
         
         /*set the data*/
         insert_sampled_record_into_map(client_addr, sampled_record);
@@ -126,8 +133,8 @@ void *connection_handler(void *thread_data_ptr)
         NOTICE("recv failed");
     }
 
-    //finish receiving data from the client, insert the client_addr into client_set
-    client_set.insert(client_addr);
+    //finish receiving data from the client, insert the client_addr into g_received_client_set
+    g_received_client_set.insert(client_addr);
          
     return 0;
 }

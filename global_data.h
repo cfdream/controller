@@ -15,6 +15,6 @@ char server_ip[20] = "10.1.0.254";
 
 
 //if the socket server finished receiving data from one client, insert the client ip into the set
-set<uint32_t> client_set;
+set<uint32_t> g_received_client_set;
 
 #endif

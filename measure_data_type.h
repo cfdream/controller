@@ -30,7 +30,8 @@ typedef struct sampled_volume_record_s {
     uint64_t port_volumes[PORT_SIZE];      //attention: at most 5 outports for one ovs
 } sampled_record_t;
 
-map<uint32_t, map<flow_key_t, sampled_record_t>* > ip_flow_sampled_record_map;
+//data from different switches. One switch has one ip different from others
+map<uint32_t, map<flow_key_t, sampled_record_t>* > ip_flow_sampled_record_map;  
 
 void insert_sampled_record_into_map(uint32_t client_ip, sampled_record_t sampled_record);
 

@@ -9,7 +9,7 @@ void *analysis_func(void*);
 void *analysis_func(void*) {
 
     while (true) {
-        if (client_set.size() < switch_num) {
+        if (g_received_client_set.size() < switch_num) {
             sleep(1);
             continue;
         }
